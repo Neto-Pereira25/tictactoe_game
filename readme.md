@@ -1,45 +1,126 @@
-# Jogo da Velha - Java com Swing
+# Jogo da Velha - Projeto de Padrões de Projeto Orientado a Objetos
 
-Este é um projeto simples de **Jogo da Velha** implementado em Java, utilizando a biblioteca Swing para criar a interface gráfica. O jogo permite que dois jogadores joguem alternadamente, com a possibilidade de desfazer movimentos e reiniciar o jogo a qualquer momento.
+## Descrição do Projeto
+
+Este projeto implementa um Jogo da Velha em Java, utilizando quatro importantes padrões de projeto:
+
+1. **Padrão Command** - Para gerenciar jogadas e possibilitar a funcionalidade de desfazer
+2. **Padrão State** - Para controlar os diferentes estados do jogo (jogando, vitória, empate)
+3. **Padrão Observer** - Para notificar a interface quando o modelo é alterado
+4. **Padrão Factory Method** - Para criar os botões da interface gráfica
+
+## Estrutura do Projeto
+
+O projeto segue uma arquitetura MVC (Model-View-Controller) modificada:
+
+```
+src/
+├── br/
+│   └── edu/
+│       └── ifpe/
+│           └── discente/
+│               └── ppoo/
+│                   └── tictactoe/
+│                       ├── command/
+│                       │   ├── Command.java
+│                       │   ├── CommandManager.java
+│                       │   └── MoveCommand.java
+│                       ├── factory/
+│                       │   ├── ButtonFactory.java
+│                       │   └── TicTacToeButtonFactory.java
+│                       ├── model/
+│                       │   ├── TicTacToe.java
+│                       │   └── TicTacToeListener.java
+│                       ├── state/
+│                       │   ├── DrawState.java
+│                       │   ├── GameState.java
+│                       │   ├── PlayingState.java
+│                       │   └── WinState.java
+│                       └── view/
+│                           └── TicTacToeUI.java
+```
+
+## Padrões de Projeto Implementados
+
+### Padrão Command
+
+O padrão Command encapsula uma solicitação como um objeto, permitindo parametrizar clientes com diferentes solicitações e suportar operações que podem ser desfeitas.
+
+- **Command**: Interface que define os métodos `execute()` e `undo()`
+- **MoveCommand**: Implementação concreta que representa uma jogada
+- **CommandManager**: Gerencia o histórico de comandos executados
+
+### Padrão State
+
+O padrão State permite que um objeto altere seu comportamento quando seu estado interno muda, parecendo mudar de classe.
+
+- **GameState**: Interface que define o comportamento comum a todos os estados
+- **PlayingState**: Estado durante o jogo normal
+- **WinState**: Estado quando um jogador vence
+- **DrawState**: Estado quando o jogo termina em empate
+
+### Padrão Observer
+
+O padrão Observer define uma dependência um-para-muitos entre objetos, de modo que quando um objeto muda de estado, todos os seus dependentes são notificados e atualizados automaticamente.
+
+- **Subject (TicTacToe)**: O modelo que mantém uma lista de observadores e os notifica quando seu estado muda
+- **Observer (TicTacToeListener)**: Interface implementada pelos observadores que desejam ser notificados
+- **ConcreteObserver (TicTacToeUI)**: Implementação concreta que reage às notificações
+
+### Padrão Factory Method
+
+O padrão Factory Method define uma interface para criar um objeto, mas permite que as subclasses decidam qual classe instanciar.
+
+- **Creator (ButtonFactory)**: Interface abstrata que define o método `createButton()`
+- **ConcreteCreator (TicTacToeButtonFactory)**: Implementação concreta que cria botões
 
 ## Funcionalidades
 
-- **Jogar Alternadamente**: Dois jogadores, "X" e "O", alternam entre as jogadas.
-- **Desfazer Movimentos**: O jogador pode desfazer a última jogada.
-- **Resetar o Jogo**: Reinicia a partida, limpando o tabuleiro e começando uma nova rodada.
-- **Condições de Vitória**: O jogo verifica automaticamente se algum jogador venceu ou se ocorreu um empate.
+- Tabuleiro de jogo 3x3
+- Alternância automática entre jogadores X e O
+- Detecção de vitória (linhas, colunas e diagonais)
+- Detecção de empate
+- Contador de pontuação para cada jogador
+- Função para desfazer a última jogada
+- Função para resetar o tabuleiro
 
-## Como Executar
+## Como Executar o Projeto
 
-Para rodar o projeto, siga as instruções abaixo:
-
-### Requisitos
-
-- JDK 8 ou superior instalado.
-- IDE como IntelliJ IDEA, Eclipse, ou NetBeans (ou pode ser executado via terminal).
-
-### Passos para Executar
-
-1. **Clone o Repositório**:
-   ```bash
-   git clone https://github.com/seu-usuario/jogo-da-velha.git
-   cd jogo-da-velha
+1. Certifique-se de ter o JDK instalado (versão 8 ou superior)
+2. Clone este repositório
+3. Compile o projeto:
    ```
-2. Compilar e Executar: Se você estiver utilizando a linha de comando, execute os seguintes comandos para compilar e rodar o projeto:
-   ```bash
-   javac Program.java
-   java Program
+   javac src/br/edu/ifpe/discente/ppoo/tictactoe/**/*.java
+   ```
+4. Execute o jogo:
+   ```
+   java -cp src br.edu.ifpe.discente.ppoo.tictactoe.Main
    ```
 
-### Funcionalidades dos Botões
-* Botões do Tabuleiro: Cada célula do tabuleiro é representada por um botão que exibe "X" ou "O" quando um jogador faz sua jogada.
-* Botão "Resetar Jogo": Reinicia a partida, limpando o tabuleiro e iniciando um novo jogo com o jogador "X".
-* Botão "Desfazer": Permite que o jogador desfaça o último movimento feito.
+## Diagrama de Classes
 
-### Padrões de Projeto Utilizados
-* Command: Utilizado para encapsular as ações de fazer um movimento no jogo, o que facilita a implementação de desfazer a jogada.
-* Observer: Usado para atualizar a interface gráfica sempre que o estado do tabuleiro muda, notificando os observadores (botões) sobre o novo estado.
-* Factory Method: Potencialmente utilizado para criar objetos de movimentos ou outros elementos de forma dinâmica, caso a implementação seja expandida no futuro.
+```
++----------------+      +----------------+      +----------------+
+|   TicTacToe    |<--->| TicTacToeListener |<-|  TicTacToeUI   |
++----------------+      +----------------+      +----------------+
+        |                                              |
+        v                                              v
++----------------+      +----------------+      +----------------+
+|   GameState    |<--->|  CommandManager |      | ButtonFactory  |
++----------------+      +----------------+      +----------------+
+   ^    ^    ^                 |                       |
+   |    |    |                 v                       v
+   |    |    |          +----------------+      +----------------+
++-----+ |  +-----+      |  MoveCommand   |      |TicTacToeButton |
+|Win  | |  |Draw |      +----------------+      |    Factory     |
+|State| |  |State|                               +----------------+
++-----+ |  +-----+
+        |
+     +--------+
+     |Playing |
+     | State  |
+     +--------+
+```
 
-### Considerações Finais
-* Este projeto foi desenvolvido por José Neto e Lucas Gabriel como requisito para a conclusão da disciplina de Padrões de Projeto Orientado à Objetos.
+## Considerações Finais
+* Este projeto foi desenvolvido por [José Neto](https://github.com/Neto-Pereira25) e [Lucas Gabriel](https://github.com/luke-rocha3) como requisito para a conclusão da disciplina de Padrões de Projeto Orientado à Objetos.
