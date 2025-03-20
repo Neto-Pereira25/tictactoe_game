@@ -1,0 +1,31 @@
+# Diretórios e arquivos do Maven
+/target/
+/.idea/
+/*.iml
+
+# Arquivos de configuração do Eclipse
+/.settings/
+/.classpath
+/.project
+
+# Arquivos de configuração do IntelliJ
+/.idea/
+/*.iml
+
+# Diretórios e arquivos de build
+/build/
+
+# Arquivos temporários de compilação
+*.log
+*.class
+
+# Arquivos de dependências do Maven
+/.mvn/
+!/.mvn/wrapper/maven-wrapper.jar
+
+# Arquivos específicos do sistema operacional
+.DS_Store
+Thumbs.db
+
+# Arquivos de configuração do sistema (para evitar versionamento de arquivos do usuário)
+*.swp
